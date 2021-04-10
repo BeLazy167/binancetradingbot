@@ -1,4 +1,5 @@
-import ccxt
+import ccxt ,time
+from datetime import datetime 
 import pandas as pd
 from ta.volatility import BollingerBands
 from ta.momentum import RSIIndicator
@@ -10,18 +11,28 @@ exchange = ccxt.binance(
         'secret':config.apiSecret,
     }
 )
-candles = exchange.fetch_ohlcv('BTC/USDT',timeframe='5m',limit = 1000)
-df = pd.DataFrame(candles, columns=['timestam','o','h','l','c','vol'])
-rsi = RSIIndicator(df['c'])
-bb = BollingerBands(df['c'])
-df["ub"] ,df["lb"]  ,df["bbma"],df['rsi']  = bb.bollinger_hband() , bb.bollinger_lband(), bb.bollinger_mavg() ,rsi.rsi()
+while True:
+    candles = exchange.fetch_ohlcv('BTC/USDT',timeframe='5m',limit = 21)
+    df = pd.DataFrame(candles[:20], columns=['timestam','o','h','l','c','vol'])
+    rsi = RSIIndicator(df['c'])
+    bb = BollingerBands(df['c'])
+    df["ub"] ,df["lb"]  ,df["bbma"],df['rsi']  = bb.bollinger_hband() , bb.bollinger_lband(), bb.bollinger_mavg() ,rsi.rsi()
+    finalData = df.tail(1).values.tolist()[0]
 
-c = df.loc[df['rsi']<=50]
-print(c)
-x = c.loc[df['o']<df['lb']]
-y = x.loc[df['c']>df['lb']]
+    if finalData[9]<40 and finalData[1]<df[7] and df[7]<df[4]:
+        print('enter')
+        break
+    else:
+        print('not yet')
+    # epoch = int(finalData[0])
+    # print(epoch)
+    # print(datetime.fromtimestamp(epoch))
+    time.sleep( 50 )
+# c = df.loc[df['rsi']<=50]
+# x = c.loc[df['o']<df['lb']]
+# y = x.loc[df['c']>df['lb']]
 
-print(y)
+# print(y)
 
 
 
