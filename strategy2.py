@@ -1,4 +1,4 @@
-import ccxt ,time
+import ccxt ,time , pprint
 from datetime import datetime 
 import pandas as pd
 from ta.volatility import BollingerBands
@@ -19,8 +19,8 @@ def tradefinder():
         bb = BollingerBands(df['c'])
         df["ub"] ,df["lb"]  ,df["bbma"],df['rsi']  = bb.bollinger_hband() , bb.bollinger_lband(), bb.bollinger_mavg() ,rsi.rsi()
         finalData = df.tail(1).values.tolist()[0]
-        print(df)
-        if finalData[9]<40 and finalData[1]<df[7] and df[7]<df[4]:
+        pprint.pprint(df)
+        if finalData[9]<40 and finalData[1]<finalData[7] and finalData[7]<finalData[4]:
             print('enter')
             break
         else:
@@ -28,15 +28,6 @@ def tradefinder():
         epoch = (finalData[0]//1000)+300
         print(epoch)
         print(time.time())
-        time.sleep( 50 )
-# c = df.loc[df['rsi']<=50]
-# x = c.loc[df['o']<df['lb']]
-# y = x.loc[df['c']>df['lb']]
+        time.sleep( 10 )
+
 tradefinder()
-# print(y)
-
-
-
-# for x in range(len(df)):
-#     if df[x]['o']<df[x]['lb'] and df[x]['lb']<df[x]['c']:
-#         print(x,df[x]['o'],df[x]['lb'],df[x]['c'])    
