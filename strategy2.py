@@ -1,19 +1,14 @@
 import ccxt ,time , pprint
-from datetime import datetime 
 import pandas as pd
 from ta.volatility import BollingerBands
 from ta.momentum import RSIIndicator
 import config
 
-exchange = ccxt.binance(
-    {
-        'apiKey':config.apiKey,
-        'secret':config.apiSecret,
-    }
-)
-def tradefinder():
+exchange = config.exchange
+symbol = "BTC/USDT"
+def tradefinder(symbol):
     while True:
-        candles = exchange.fetch_ohlcv('BTC/USDT',timeframe='5m',limit = 21)
+        candles = exchange.fetch_ohlcv(symbol,timeframe='5m',limit = 21)
         df = pd.DataFrame(candles[:20], columns=['timestam','o','h','l','c','vol'])
         rsi = RSIIndicator(df['c'])
         bb = BollingerBands(df['c'])
@@ -25,9 +20,11 @@ def tradefinder():
             break
         else:
             print('not yet')
-        epoch = (finalData[0]//1000)+300
-        print(epoch)
-        print(time.time())
-        time.sleep( 10 )
+            epoch = (finalData[0]//1000)+300
+        
+        while time.time()-300 <= epoch:
+            print(epoch)
+            print(time.time()-300)
+            time.sleep(2)
 
-tradefinder()
+tradefinder(symbol)
