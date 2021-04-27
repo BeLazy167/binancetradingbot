@@ -17,14 +17,14 @@ def tradefinder(symbol):
         pprint.pprint(df)
         if finalData[9]<40 and finalData[1]<finalData[7] and finalData[7]<finalData[4]:
             print('enter')
-            break
+            continue
         else:
             print('not yet')
-            epoch = (finalData[0]//1000)+300
+            epoch = (finalData[0]//1000)+600
         
-        while time.time()-300 <= epoch:
+        while time.time() <= epoch:
             print(epoch)
-            print(time.time()-300)
-            time.sleep(2)
+            print(int(time.time()))
+            time.sleep(1)
 
 tradefinder(symbol)
