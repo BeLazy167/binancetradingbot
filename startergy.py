@@ -6,6 +6,8 @@ RSI_PERIOD = 13
 RSI_OVERBOUGHT = 70
 RSI_OVERSOLD = 30
 BB_PERIOD = 30
+EMA11 = 200
+EMA2 = 50
 TRADE_SYMBOL = 'BTCUSDT'
 
 SOCKET = "wss://stream.binance.com:9443/ws/btcusdt@kline_5m"
